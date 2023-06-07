@@ -18,12 +18,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-size: 2em;
         }
 
         #main {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
 
         select {
@@ -59,8 +61,17 @@
             opacity: 0.5;
         }
 
-        .heading-container {
-            display: flex;
+        @media screen and (min-width: 768px) {
+
+            /* Styles for screens wider than mobile */
+            /* Add your CSS rules here */
+            body {
+                font-size: 1em;
+            }
+
+            #main {
+                flex-direction: row;
+            }
         }
     </style>
 </head>
@@ -68,15 +79,13 @@
 <body>
     <h1>Skill Jam</h1>
     <div id="main">
-        <div class="heading-container">
-            <select id="skills">
-                <option disabled selected>Skill</option>
-            </select>
-            <select id="themes">
-                <option disabled selected>Theme</option>
-            </select>
-            <button id="spinButton" onclick="spin()">Spin!</button>
-        </div>
+        <select id="skills">
+            <option disabled selected>Skill</option>
+        </select>
+        <select id="themes">
+            <option disabled selected>Theme</option>
+        </select>
+        <button id="spinButton" onclick="spin()">Spin!</button>
     </div>
     <script>
         function shuffleArray(array) {

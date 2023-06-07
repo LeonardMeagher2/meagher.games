@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Jams</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background-color: #efefef;
+            color: #222;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        select {
+            flex: 1;
+            color: inherit;
+            appearance: none;
+            outline: none;
+            border: 0px;
+            border-radius: 0.5em;
+            margin: 0.2em;
+            padding: 0.2em;
+            background: none;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .spin-done {
+            background: #fff;
+        }
+
+        button {
+            background-color: #fff;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            font-size: 1.2em;
+            margin: 0.5em;
+            cursor: pointer;
+            border: 0;
+            border-radius: 0.5em;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+        }
+
+        .heading-container {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Skill Jam</h1>
+    <div id="main">
+        <div class="heading-container">
+            <select id="skills">
+                <option disabled selected>Skill</option>
+            </select>
+            <select id="themes">
+                <option disabled selected>Theme</option>
+            </select>
+            <button id="spinButton" onclick="spin()">Spin!</button>
+        </div>
+    </div>
+    <script>
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        const skills = [
+            "🎨 Art",
+            "🎵 Music",
+            "📚 Story",
+            "💻 Programming"
+        ]
+        const themes = [
+            "Space", "Medieval", "Horror", "Fantasy", "Cyberpunk", "Pirate", "Wild West", "Underwater", "Time Travel",
+            "Post-Apocalyptic", "Fairy Tale", "Steampunk", "Mystery", "Romance", "Comedy", "Tragedy", "Adventure", "Sci-Fi",
+            "Historical", "Military", "Alien Invasion", "Zombie Apocalypse", "Superheroes", "Villains", "Magic and Sorcery",
+            "Espionage", "Survival", "War", "Ninja", "Robot Uprising", "Urban", "Country", "Jungle", "Desert", "Arctic",
+            "Vampire", "Werewolf", "Monster", "Demon", "Angel", "Mythology", "Religious", "Political", "Educational",
+            "Family", "Kids", "Teen", "Adult", "Old Age", "Virtual Reality", "Augmented Reality", "Dreams", "Nightmares",
+            "Dinosaurs", "Mutants", "Cyborgs", "Future", "Past", "Present", "Sports", "Racing", "Flight", "Detective",
+            "Spy", "Murder Mystery", "Heist", "Rescue Mission", "Treasure Hunt", "Epic Quest", "End of the World",
+            "Beginning of the World", "Rebellion", "Empire", "Kingdom", "Colony", "Tribal", "Animal", "Insect", "Plant",
+            "Mineral", "Elemental", "Mechanical", "Digital", "Undead", "Ghost", "Witch", "Wizard", "Circus", "Festival",
+            "Holiday", "Seasons", "Weather", "Disaster", "Celebration", "Science", "Technology", "Nature", "Supernatural",
+            "Mythical Creatures", "Realistic", "Unrealistic", "Abstract", "Concrete", "Bright", "Dark", "Loud", "Quiet",
+            "Fast", "Slow", "Big", "Small"
+        ];
+
+        function populateOptions(id, items) {
+            const shuffled = shuffleArray(items);
+            const select = document.getElementById(id);
+            for (let i = 0; i < shuffled.length; i++) {
+                let option = document.createElement("option");
+                option.text = shuffled[i];
+                select.add(option);
+            }
+        }
+
+        populateOptions("skills", skills);
+        populateOptions("themes", themes);
+
+        function spin() {
+            const spinButton = document.getElementById("spinButton");
+            const skillSelect = document.getElementById('skills')?.querySelector("option[disabled]")?.remove();
+            const themeSelect = document.getElementById('themes')?.querySelector("option[disabled]")?.remove();
+
+            spinButton.disabled = true;
+            console.log(spinButton)
+            Promise.all([
+                spinSelect('skills'),
+                spinSelect('themes')
+            ]).then(() => {
+                spinButton.disabled = false;
+            })
+        }
+
+        function spinSelect(id) {
+            return new Promise((res) => {
+                const select = document.getElementById(id);
+                select.classList.remove("spin-done");
+                const length = select.options.length;
+                let speed = Math.random() * 10.0 + length + 2.0; // choose a random starting speed between 0.02 and 0.05
+                let index = Math.random() * length;
+                const friction = 0.99; // choose a friction factor
+                let lastTime = Date.now();
+                // Start at a random index
+                select.selectedIndex = Math.floor(index);
+
+                function step() {
+                    const delta = (Date.now() - lastTime) / 1000; // calculate the elapsed time
+                    lastTime = Date.now();
+                    speed *= friction; // apply friction to the speed
+                    index += speed * delta; // interpolate the index
+                    select.selectedIndex = Math.floor(index) % length;
+                    if (speed < 1.0) {
+                        res();
+                        select.classList.add("spin-done");
+                        return;
+                    }
+                    requestAnimationFrame(step); // schedule the next step for the next animation fram
+                }
+                step(); // start the spin
+            });
+        }
+    </script>
+</body>
+
+</html>

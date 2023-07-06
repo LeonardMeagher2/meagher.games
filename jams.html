@@ -99,9 +99,9 @@
             return `${month}/${year}`;
         }
 
-        function shuffleArray(array, rng = Math) {
+        function shuffleArray(array, rand = Math.random) {
             for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(rng.random() * (i + 1));
+                const j = Math.floor(rand() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
             return array;
@@ -128,8 +128,8 @@
             "Fast", "Slow", "Big", "Small"
         ];
 
-        function populateOptions(id, items, rng = Math) {
-            const shuffled = shuffleArray(items, rng);
+        function populateOptions(id, items, rand = Math.random) {
+            const shuffled = shuffleArray(items, rand);
             const select = document.getElementById(id);
             for (let i = 0; i < shuffled.length; i++) {
                 let option = document.createElement("option");
@@ -161,13 +161,13 @@
             })
         }
 
-        function spinSelect(id, rng = Math) {
+        function spinSelect(id, rand = Math.random) {
             return new Promise((res) => {
                 const select = document.getElementById(id);
                 select.classList.remove("spin-done");
                 const length = select.options.length;
-                let speed = rng.random() * 10.0 + length + 2.0; // choose a random starting speed between 0.02 and 0.05
-                let index = rng.random() * length;
+                let speed = rand() * 10.0 + length + 2.0; // choose a random starting speed between 0.02 and 0.05
+                let index = rand() * length;
                 const friction = 0.99; // choose a friction factor
                 let lastTime = Date.now();
                 // Start at a random index
